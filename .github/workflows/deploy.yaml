@@ -30,4 +30,4 @@ jobs:
             imageToBuild: ghcr.io/farisoftware/oauth2-proxy
             containerAppEnvironment: ${{ secrets.AZURE_RESOURCE_GROUP_FINKONU_DEV }}-container-environment
             targetPort: 4180
-            location: "\"Germany West Central\""
+            location: "'Germany West Central'"
