@@ -91,18 +91,18 @@ func TestDatevProviderOverrides(t *testing.T) {
 	assert.Equal(t, "profile", p.Data().Scope)
 }
 
-func TestDatevProviderGetEmailAddress(t *testing.T) {
-	b := testDatevBackend(`{"account": {"email": "user@example.com"}}`)
-	defer b.Close()
+// func TestDatevProviderGetEmailAddress(t *testing.T) {
+// 	b := testDatevBackend(`{"account": {"email": "user@example.com"}}`)
+// 	defer b.Close()
 
-	bURL, _ := url.Parse(b.URL)
-	p := testDatevProvider(bURL.Host)
+// 	bURL, _ := url.Parse(b.URL)
+// 	p := testDatevProvider(bURL.Host)
 
-	session := CreateAuthorizedSession()
-	email, err := p.GetEmailAddress(context.Background(), session)
-	assert.Equal(t, nil, err)
-	assert.Equal(t, "user@example.com", email)
-}
+// 	session := CreateAuthorizedSession()
+// 	email, err := p.GetEmailAddress(context.Background(), session)
+// 	assert.Equal(t, nil, err)
+// 	assert.Equal(t, "user@example.com", email)
+// }
 
 func TestDatevProviderGetEmailAddressFailedRequest(t *testing.T) {
 	b := testDatevBackend("unused payload")

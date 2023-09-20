@@ -95,17 +95,15 @@ func (p *DatevProvider) ValidateSession(ctx context.Context, s *sessions.Session
 	return validateToken(ctx, p, s.AccessToken, makeOIDCHeader(s.AccessToken))
 }
 
-func (p *DatevProvider) getUserInfo(ctx context.Context, s *sessions.SessionState) ([]string, error) {
+func (p *DatevProvider) getUserInfo(ctx context.Context, s *sessions.SessionState) error {
 	if s.AccessToken == "" {
-		return nil, fmt.Errorf("missing access token")
+		return fmt.Errorf("missing access token")
 	}
 
 	// // Need and extra header while talking with MS Graph. For more context see
 	// // https://docs.microsoft.com/en-us/graph/api/group-list-transitivememberof?view=graph-rest-1.0&tabs=http#request-headers
 	// extraHeader := makeAzureHeader(s.AccessToken)
 	// extraHeader.Add("ConsistencyLevel", "eventual")
-
-	var groups []string
 
 	if datevDefaultProfileURL.String() != "" {
 		jsonRequest := requests.New(datevDefaultProfileURL.String()).
@@ -115,17 +113,18 @@ func (p *DatevProvider) getUserInfo(ctx context.Context, s *sessions.SessionStat
 		json, err := jsonRequest.Do().
 			UnmarshalSimpleJSON()
 		if err != nil {
-			return nil, fmt.Errorf("unable to unmarshal userinfo response: %v", err)
+			return fmt.Errorf("unable to unmarshal userinfo response: %v", err)
 
 		}
 		email, err := json.Get("email").String()
 
+		if err != nil {
+			return err
+		}
 		s.Email = email
-
-		groups = append([]string{email})
 	}
 
-	return groups, nil
+	return nil
 }
 
 func (p *DatevProvider) EnrichSession(ctx context.Context, s *sessions.SessionState) error {
@@ -155,8 +154,7 @@ func (p *DatevProvider) Redeem(ctx context.Context, redirectURL, code, codeVerif
 		params.Add("resource", p.ProtectedResource.String())
 	}
 
-	var auth string
-	auth = p.ClientID + ":" + p.ClientSecret
+	auth := p.ClientID + ":" + p.ClientSecret
 	// var authEncoded []byte
 	authEncoded := base64.RawStdEncoding.EncodeToString([]byte(auth))
 

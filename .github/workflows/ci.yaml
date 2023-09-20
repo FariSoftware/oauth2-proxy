@@ -45,10 +45,8 @@ jobs:
         make build
 
     - name: Test
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       run: |
-        ./.github/workflows/test.sh
+        make test
 
   docker:
     runs-on: ubuntu-20.04
