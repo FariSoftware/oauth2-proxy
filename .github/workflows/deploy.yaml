@@ -16,7 +16,7 @@ jobs:
         - name: Log in to Azure
           uses: azure/login@v1
           with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+            creds: ${{ secrets.AZURE_CREDENTIALS_FINKONU_DEV }}
 
         - name: Build and deploy Container App
           uses: azure/container-apps-deploy-action@v1
@@ -24,9 +24,9 @@ jobs:
             appSourcePath: ${{ github.workspace }}
             registryUrl: ghcr.io
             containerAppName: oauth2-proxy
-            resourceGroup: finkonu-dev
+            resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_FINKONU_DEV }}
             registryUsername: matspi
             registryPassword: ${{ secrets.GH_TOKEN }}
             imageToBuild: ghcr.io/FariSoftware/oauth2-proxy
-            containerAppEnvironment: finkonu-dev-container-environment
+            containerAppEnvironment: ${{ secrets.AZURE_RESOURCE_GROUP_FINKONU_DEV }}-container-environment
             targetPort: 4180
