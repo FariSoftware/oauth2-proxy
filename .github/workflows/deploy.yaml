@@ -27,6 +27,6 @@ jobs:
             resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_FINKONU_DEV }}
             registryUsername: matspi
             registryPassword: ${{ secrets.GH_TOKEN }}
-            imageToBuild: ghcr.io/FariSoftware/oauth2-proxy
+            imageToBuild: ghcr.io/farisoftware/oauth2-proxy
             containerAppEnvironment: ${{ secrets.AZURE_RESOURCE_GROUP_FINKONU_DEV }}-container-environment
             targetPort: 4180
